@@ -4,39 +4,60 @@ describe("Login spec", () => {
   let createIssueTitle;
   let deleteIssueTitle;
 
+  //tai ko reikia visiems testams
   beforeEach(() => {
-    cy.visit(`${Cypress.env("url")}/register`);
+    cy.goTo("/register");
     cy.contains(/log in to webIssues/i);
-    cy.get('input[id="field-login-login"]').type(Cypress.env("username"));
-    cy.get('input[id="field-login-password"]').type(Cypress.env("password"));
-    cy.get('input[id="field-login-loginSubmit"]').click();
+    cy.login(Cypress.env("username"), Cypress.env("password"));
     cy.contains(/Administration Panel/i);
-    cy.get(`a[href='${Cypress.env("url")}/register/index.php']`).contains(
-      /Log Out/i
-    );
+    cy.get(
+      'a[href="https://www.testingmarathon.com/register/index.php"]'
+    ).contains(/Log Out/i);
 
-    cy.visit(`${Cypress.env("url")}/register/client/index.php?folder=1`);
+    cy.goTo("/register/client/index.php?folder=1");
+
+    cy.issuePageElements();
   });
 
+  //vieno testo dalykas
   after(() => {
     //delete create issue
-    cy.visit(`${Cypress.env("url")}/register/client/index.php?folder=1`);
-    //search
-    cy.get('[name="searchBox"]').type(createIssueTitle);
-    cy.get("#field-search-searchSubmit").click();
-    cy.get(`[title="${createIssueTitle}"]`);
+    if (createIssueTitle !== undefined) {
+      cy.goTo("/register/client/index.php?folder=1");
+      //search
+      cy.get('[name="searchBox"]').type(createIssueTitle);
+      cy.get("#field-search-searchSubmit").click();
+      cy.get(`[title="${createIssueTitle}"]`).click();
 
-    cy.get('[title="Delete Issue"]').click();
-    cy.get("#field-issues-okSubmit").click();
-    cy.contains(createIssueTitle).should("not.exist");
+      cy.get('[title="Delete Issue"]').click();
+      cy.get("#field-issues-okSubmit").click();
+    }
   });
 
   before(() => {
-    cy.visit(`${Cypress.env("url")}/register/client/index.php?folder=1`);
+    deleteIssueTitle = faker.string.uuid();
+    cy.goTo("/register");
+    cy.contains(/log in to webIssues/i);
+    cy.login(Cypress.env("username"), Cypress.env("password"));
+    cy.contains(/Administration Panel/i);
+    cy.get(
+      'a[href="https://www.testingmarathon.com/register/index.php"]'
+    ).contains(/Log Out/i);
+
+    cy.goTo("/register/client/index.php?folder=1");
+
+    cy.issuePageElements();
+    cy.get("@add-issue-button").click();
+    cy.get("#field-issues-issueName").type(deleteIssueTitle);
+    cy.get("#field-issues-descriptionText").type(
+      `Cypress issue description ${deleteIssueTitle}`
+    );
+    cy.get("#field-issues-okSubmit").click();
   });
 
-  it("should be able to create and delete issue", () => {
-    cy.get('[title="Add Issue"]').click();
+  it.only("should be able to create and delete issue", () => {
+    cy.get("@add-issue-button").click();
+
     cy.get("#field-issues-issueName").type("Gintares cypress title");
     cy.get("#field-issues-descriptionText").type("Gintares issue description");
     cy.get("#field-issues-okSubmit").click();
@@ -50,7 +71,7 @@ describe("Login spec", () => {
   });
 
   it("should not be able to issue with empty title", () => {
-    cy.get('[title="Add Issue"]').click();
+    cy.get("@add-issue-button").click();
     cy.get("#field-issues-issueName").type(" ");
     cy.get("#field-issues-descriptionText").type("Gintares issue description");
     cy.get("#field-issues-okSubmit").click();
@@ -60,18 +81,23 @@ describe("Login spec", () => {
   });
 
   it("should be able to create issue", () => {
-    cy.get('[title="Add Issue"]').click();
+    let createIssueTitle = faker.string.uuid();
+    cy.get("@add-issue-button").click();
     cy.get("#field-issues-issueName").type(createIssueTitle);
-    cy.get("#field-issues-descriptionText").type("Gintares issue description");
+    cy.get("#field-issues-descriptionText").type(
+      `Cypress issue description ${createIssueTitle}`
+    );
     cy.get("#field-issues-okSubmit").click();
     cy.get("#infobar-left").contains(createIssueTitle).should("be.visible");
   });
 
-  it("should be able to delte issue", () => {
-    cy.get('[title="Add Issue"]').click();
-    cy.get("#field-issues-issueName").type(createIssueTitle);
-    cy.get("#field-issues-descriptionText").type();
+  it("should be able to delete issue", () => {
+    cy.get('[name="searchBox"]').type(deleteIssueTitle);
+    cy.get("#field-search-searchSubmit").click();
+    cy.get(`[title="${deleteIssueTitle}"]`).click();
+
+    cy.get('[title="Delete Issue"]').click();
     cy.get("#field-issues-okSubmit").click();
-    cy.get("#infobar-left").contains(deleteIssueTitle).should("be.visible");
+    cy.contains(deleteIssueTitle).should("not.exist");
   });
 });

@@ -9,11 +9,13 @@ module.exports = defineConfig({
     password: process.env.PASSWORD,
     url: process.env.URL,
     api_url: process.env.API_URL,
-    api_key: process.env.API - KEY,
+    api_key: process.env.API_KEY,
   },
   e2e: {
     setupNodeEvents(on, config) {
       // implement node event listeners here
+
+      console.log("enviroment=========" + process.env.NODE_ENV);
     },
   },
 });
