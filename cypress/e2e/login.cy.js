@@ -1,6 +1,6 @@
 describe("Login spec", () => {
   beforeEach(() => {
-    cy.visit("https://www.testingmarathon.com/register");
+    cy.goTo("/register");
     cy.contains(/Log in to WebIssues/i);
   });
 
