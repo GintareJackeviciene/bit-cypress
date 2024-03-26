@@ -1,9 +1,13 @@
-const { defineConfig } = require("cypress");
-require("dotenv").config({
+import { defineConfig } from "cypress";
+import * as dotenv from "dotenv"
+
+dotenv.config({
   path: `./cypress/ENV/${process.env.NODE_ENV || "test"}.env`,
 });
 
-module.exports = defineConfig({
+
+
+export default  defineConfig({
   env: {
     username: process.env.USER,
     password: process.env.PASSWORD,
