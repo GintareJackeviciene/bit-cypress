@@ -37,13 +37,13 @@ describe('API contacts spec', () => {
         });
     });
 
-    it('should be able to create contacts with invalid email', () => {
+    it('should not be able to create contacts with invalid email', () => {
         cy.createContactByEmail('gdngdfgnodfn.com', false).then((response) => {
             expect(response.status).eq(400);
         });
     });
 
-    it('should not be able to get contact list of 10 contact', () => {
+    it('should be able to get contact list of 10 contact', () => {
         cy.GETcontacts(undefined, 10).then((response) => {
             expect(response.status).eq(200);
             //cy.log(response.body);

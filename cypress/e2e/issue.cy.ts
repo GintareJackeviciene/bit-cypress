@@ -49,7 +49,7 @@ describe('Login spec', () => {
         cy.get('#field-issues-okSubmit').click();
     });
 
-    it.only('should be able to create and delete issue', () => {
+    it('should be able to create and delete issue', () => {
         cy.get('@add-issue-button').click();
 
         cy.get('#field-issues-issueName').type('Gintares cypress title');
