@@ -1,3 +1,5 @@
+import { faker } from '@faker-js/faker';
+
 describe('robodam test', () => {
     it('should navigate through the site', () => {
         cy.visit('https://robodam.com/#book-demo');
@@ -18,6 +20,7 @@ describe('robodam test', () => {
         }
         return true;
     });
+    const email = `${faker.internet.email()}`;
     it('should be able to login for demo call', () => {
         cy.visit('https://robodam.com/#book-demo');
         cy.contains('Accept').should('be.visible').click();
@@ -26,7 +29,7 @@ describe('robodam test', () => {
         cy.get('input[placeholder="Name and Surname"]').type('Vardas');
         cy.get('input[placeholder="Company"]').type('rimta kompanija');
         cy.get('input[placeholder="Phone"]').type('1');
-        cy.get('input[placeholder="Email"]').type('V@ggg.com');
+        cy.get('input[placeholder="Email"]').type(email);
         cy.get('button').contains('Book').click();
         cy.contains('Booked').should('be.visible');
     });
