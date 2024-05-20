@@ -12,4 +12,22 @@ describe('robodam test', () => {
         cy.get('button.block').click();
         cy.contains('.mobile-menu-background a', 'Library').click();
     });
+    Cypress.on('uncaught:exception', (err) => {
+        if(err.message.includes('d is not a function')){
+            return false;
+        }
+        return true;
+    });
+    it('should be able to login for demo call', () => {                                                                                fffffffo call', () => {
+        cy.visit('https://robodam.com/#book-demo');
+        cy.contains('Accept').should('be.visible').click();
+        cy.get('li.w-16 > a[href="/#book-demo"]').click();
+        cy.contains('h2', 'Book a free demo call').should('be.visible');
+        cy.get('input[placeholder="Name and Surname"]').type('Vardas');
+        cy.get('input[placeholder="Company"]').type('rimta kompanija');
+        cy.get('input[placeholder="Phone"]').type('1');
+        cy.get('input[placeholder="Email"]').type('V@ggg.com');
+        cy.get('button', 'Book').click();
+        cy.contains('Booked').should('be.visible');
+    });
 });
