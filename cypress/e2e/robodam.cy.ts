@@ -1,5 +1,5 @@
 describe('robodam test', () => {
-    it('robodam.com', () => {
+    it('should navigate through the site', () => {
         cy.visit('https://robodam.com/#book-demo');
         cy.contains('Accept').should('be.visible').click();
         cy.get('h1').contains('New level of productivity');
@@ -13,12 +13,12 @@ describe('robodam test', () => {
         cy.contains('.mobile-menu-background a', 'Library').click();
     });
     Cypress.on('uncaught:exception', (err) => {
-        if(err.message.includes('d is not a function')){
+        if (err.message.includes('d is not a function')) {
             return false;
         }
         return true;
     });
-    it('should be able to login for demo call', () => {                                                                                fffffffo call', () => {
+    it('should be able to login for demo call', () => {
         cy.visit('https://robodam.com/#book-demo');
         cy.contains('Accept').should('be.visible').click();
         cy.get('li.w-16 > a[href="/#book-demo"]').click();
@@ -27,7 +27,7 @@ describe('robodam test', () => {
         cy.get('input[placeholder="Company"]').type('rimta kompanija');
         cy.get('input[placeholder="Phone"]').type('1');
         cy.get('input[placeholder="Email"]').type('V@ggg.com');
-        cy.get('button', 'Book').click();
+        cy.get('button').contains('Book').click();
         cy.contains('Booked').should('be.visible');
     });
 });
